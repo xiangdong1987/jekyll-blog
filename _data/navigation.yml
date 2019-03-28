@@ -1,0 +1,6 @@
+- name: 我的博客
+  link: /
+- name: 关于我
+  link: /about/index.html
+- name: 分类
+  link: /categories.html
