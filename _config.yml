@@ -29,6 +29,7 @@ plugins:
   - jekyll-feed
 destination:
   ../ytiamo.github.io/
+google_analytics: UA-137167814-1
 
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list
