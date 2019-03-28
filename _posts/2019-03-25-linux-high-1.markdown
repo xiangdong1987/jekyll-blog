@@ -8,12 +8,15 @@ categories: linux
 为了学习线上问题处理，我们需要刻意练习线上各种问题的产生原因，从而从根本上解决问题。
 
 ### 系统压测练习
-* 安装系统压测工具stress和sysstat 
+* 安装系统压测工具stress和sysstat
+
 ```
 sudo apt-get install stress sysstat
 ```
-### 场景
+
+### 场景练习
 * cpu密集型:模拟两个cpu100%情况
+
 ```
 stress --cpu 2 --timeout 600
 //每隔5秒监控cupload
@@ -21,14 +24,18 @@ watch -d uptime 5
 //每个cup的使用情况
 mpstat -P ALL 5
 ```
+
 * io密集型
+
 ```
 //stress 无法模拟
 stress -i 2 --timeout 600
 //stress-ng 来模拟
 stress-ng -i 2 --hdd 1 --timeout 600
 ```
+
 * 大量进程
+
 ```
 stress -c 8 --timeout 600
 ```
