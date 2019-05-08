@@ -8,6 +8,7 @@ categories: Go
 
 ## 方法声明
 * 在函数声明时，在其名字之前放上一个变量，即是一个方法。这个附加的参数会将该函数附加到这种类型上，即相当于为这种类型定义了一个独占的方法。
+
 ```
 package geometry
 
@@ -24,9 +25,11 @@ type Point struct{ X, Y float64 }
 }
 
 ```
+
 * 上面的代码里那个附加的参数p，叫做方法的接收器(receiver)，早期的面向对象语言留下的遗产将调用一个方法称为“向一个对象发送消息”。
 * 在go语言中不适用this self做方法接收器，它建议适用类型的首字母作为接收器简短一致。
 * 包级的方法不会跟类型的方法产生混乱
+
 ```
     // A Path is a journey connecting the points with straight lines.type Path []Point
     // Distance returns the distance traveled along the path.func (path Path) Distance() float64 {
@@ -47,6 +50,7 @@ type Point struct{ X, Y float64 }
     }
     fmt.Println(perim.Distance()) // "12"
 ```
+
 * 在上面两个对Distance名字的方法的调用中，编译器会根据方法的名字以及接收器来决定具体调用的是哪一个函数。第一个例子中path[i-1]数组中的类型是Point，因此Point.Distance这个方法被调用；在第二个例子中perim的类型是Path，因此Distance调用的是Path.Distance。
 * 对于一个给定的类型，其内部的方法都必须有唯一的方法名，但是不同的类型却可以有同样的方法名，比如我们这里Point和Path就都有Distance这个名字的方法；所以我们没有必要非在方法名之前加类型名来消除歧义，比如PathDistance。
 
@@ -70,6 +74,7 @@ type Point struct{ X, Y float64 }
     * 第二方面是如果你用指针类型作为receiver，那么你一定要注意，这种指针类型指向的始终是一块内存地址，就算你对其进行了拷贝。熟悉C或者C艹的人这里应该很快能明白。
 ## 通过嵌入结构体来扩展类型
 * 嵌入式写法，简化写代码时类型适用声明
+
 ```
 
 import "image/color"
@@ -87,7 +92,9 @@ fmt.Println(cp.Point.X) // "1"
 cp.Point.Y = 2
 fmt.Println(cp.Y) // "2"
 ```
+
 * 对于Point中的方法我们也有类似的用法，我们可以把ColoredPoint类型当作接收器来调用Point里的方法，即使ColoredPoint里没有声明这些方法：
+
 ```
 red := color.RGBA{255, 0, 0, 255}
 blue := color.RGBA{0, 0, 255, 255}
@@ -98,9 +105,11 @@ p.ScaleBy(2)
 q.ScaleBy(2)
 fmt.Println(p.Distance(q.Point)) // "10"
 ```
+
 * Point类的方法也被引入了ColoredPoint。用这种方式，内嵌可以使我们定义字段特别多的复杂类型，我们可以将字段先按小类型分组，然后定义小类型的方法，之后再把它们组合起来。
 > 嵌入并不是代表继承的意思，更像是组合。并不是嵌入了某种类型这个类型类型就是某种类型的子类型，应该说是组合起来适用的更为合适。
 > 如果想继承方法可以用匿名字段或者引用字段来做继承
+
 ```
 type ColoredPoint struct {
     *Point
@@ -114,7 +123,9 @@ q.Point = p.Point                 // p and q now share the same Point
 p.ScaleBy(2)
 fmt.Println(*p.Point, *q.Point) // "{2 2} {2 2}"
 ```
+
 * 就是因为有了内嵌才有下面的小技巧：
+
 ```
 var (
     mu sync.Mutex // guards mapping
@@ -128,6 +139,7 @@ func Lookup(key string) string {
     return v
 }
 ```
+
 * 可以改写成如下：
 ```
 var cache = struct {
@@ -146,7 +158,9 @@ func Lookup(key string) string {
 }
 ```
 * 使代码更简洁更优雅
+
 ## 方法值和方法表达式
+
 * 类型中的函数调用分两步
     * 用选择器选择方法，指定接收器
     * 根据接收器和参数返回方法值
@@ -172,12 +186,14 @@ func (path Path) TranslateBy(offset Point, add bool) {
     }
 }
 ```
+
 ## 封装
 * 一个对象的变量或者方法如果对调用方是不可见的话，一般就被定义为“封装”。封装有时候也被叫做信息隐藏，同时也是面向对象编程最关键的一个方面。
 * 封装的优点
     * 首先，因为调用方不能直接修改对象的变量值，其只需要关注少量的语句并且只要弄懂少量变量的可能的值即可。
     * 第二，隐藏实现的细节，可以防止调用方依赖那些可能变化的具体实现，这样使设计包的程序员在不破坏对外的api情况下能得到更大的自由。
     * 第三个优点也是最重要的优点，是阻止了外部调用方对对象内部的值任意地进行修改。
+    
 ## 总结
 我们学到了如何将方法与命名类型进行组合，并且知道了如何调用这些方法。尽管方法对于OOP编程来说至关重要，但他们只是OOP编程里的半边天。为了完成OOP，我们还需要接口。Go里的接口会在接下来的学习中学习到。
 
