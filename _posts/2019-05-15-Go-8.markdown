@@ -19,6 +19,7 @@ categories: Go
 
 ## sync.Mutex互斥锁
 * 前面学习的时候我们可以利用buffer channel控制gorontine的深度，如果我们用buffer等于的channel 就可以控制变量的访问如下代码：
+
 ```
 var (
     sema    = make(chan struct{}, 1) // a binary semaphore guarding balance
@@ -38,6 +39,7 @@ func Balance() int {
     return b
 }
 ```
+
 * 这种互斥很实用，而且被sync包里的Mutex类型直接支持。它的Lock方法能够获取到token(这里叫锁)，并且Unlock方法会释放这个token
 * 在锁之间的区域叫做临界区，为了使用临界区的临界关闭正确一般我会选择使用defer来控制临界区的关闭。
 
@@ -48,6 +50,7 @@ func Balance() int {
     return balance
 }
 ```
+
 * Go 是没有重入锁的（java中是有重入锁：锁上锁）关于Go的互斥量不能重入这一点我们有很充分的理由。互斥量的目的是为了确保共享变量在程序执行时的关键点上能够保证不变性。不变性的其中之一是“没有goroutine访问共享变量”。
 * 所以在包的封装上，一个通用的解决方案是将一个函数分离为多个函数，比如我们把Deposit分离成两个：一个不导出的函数deposit，这个函数假设锁总是会被保持并去做实际的操作，另一个是导出的函数Deposit，这个函数会调用deposit，但在调用前会先去获取锁。
 
