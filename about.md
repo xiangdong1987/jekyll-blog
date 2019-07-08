@@ -12,3 +12,4 @@ permalink: /about/
 * [spark 协同过滤](https://github.com/xiangdong1987/sparkRecommend)
 * [基于swoole的后台框架](https://github.com/xiangdong1987/Slob)
 * [tiny swoole 学习swoole源码实践](https://github.com/xiangdong1987/tinys)
+* [python大数据分析](https://github.com/xiangdong1987/python_data_analysis)
